@@ -1,0 +1,27 @@
+
+#define F_CPU 16000000UL  // 16 MHz clock speed
+
+#include <avr/io.h>
+
+void square_wave() {
+
+    DDRD |= (1 << PD6);   // POrt D6 is the OCOA pin
+    // Set Fast PWM mode (Mode 3)  Page 86
+    TCCR0A |= (1 << WGM01) | (1 << WGM00);
+    TCCR0A |= (1 << COM0A1);  //  Clear OC0A on Compare Match,
+    // set at BOTTOM  (Non Inverting mode page 84)
+
+    // Set prescaler to 256   page 87
+    TCCR0B |= (1 << CS02);//| (1 << CS00);
+
+    OCR0A = 127;  // set duty cycle
+}
+
+int main(void) {
+    square_wave();
+
+    while(1) {
+    }
+
+    return 0;
+}
